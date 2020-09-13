@@ -71,16 +71,18 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io.connect('/tech');//connectin to tech namespace
+      const room = "java";
+      const socket = io.connect("/tech"); //connectin to tech namespace
       $("form").submit(() => {
-        socket.emit("message", $("#m").val()); //emit the id of m
+        let msg = $("#m").val();
+        socket.emit("message", { msg, room }); //emit the id of m
         $("#m").val(""); //clean input
         return false;
       });
 
       socket.on("connect", () => {
         //emitting to evreybody
-        socket.emit("message", "user connected");
+        socket.emit("join", { room: room });
       });
 
       socket.on("message", (msg) => {
